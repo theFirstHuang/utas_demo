@@ -64,7 +64,8 @@ class FullChain:
                     result_summary=str(result)[:1000],
                     performance_metrics={'rows': len(result)}
                 )
-                print('Run Success')
+                print('Running Success')
+                print('--- RUNNING Chain 5: Logging info')
                 return {
                     'status': 'success',
                     'result': result,
@@ -73,18 +74,23 @@ class FullChain:
                 
             except Exception as e:
                 # 4.1 Try optimization if execution fails
+                print('Running Failed')
+                print('--- RUNNING Chain 4.1: query optimize chain')
                 optimized_query = self.optimization_chain.optimize(
                     sql_query, 
                     str(e), 
                     schema
                 )
-                
+                print(f'query after optimization:\n{optimized_query}')
+
                 try:
                     # 4.2 Execute optimized query
+                    print('--- RUNNING Chain 4.2: query optimize chain')
                     start_time = time.time()
                     result = self.db.run(optimized_query)
                     execution_time = time.time() - start_time
-                    
+                    print('Running Success after optimization')
+                    print('--- RUNNING Chain 5.2: Logging info')
                     # 5.2 Log successful execution after optimized
                     self.feedback_chain.log_execution(
                         original_question=question,
@@ -105,6 +111,8 @@ class FullChain:
                     
                 except Exception as e:
                     # 5.3 Log unsuccessful execution
+                    print('Running Failed after optimization')
+                    print('--- RUNNING Chain 5.3: Logging info')
                     self.feedback_chain.log_execution(
                         original_question=question,
                         clarified_question=intent_result['clarified_question'],
@@ -113,7 +121,7 @@ class FullChain:
                         success=False,
                         error_message=str(e)
                     )
-                    
+                    print('Full Chain finished')
                     return {
                         'status': 'error',
                         'error': str(e)

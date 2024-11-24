@@ -35,4 +35,4 @@ GROQ_LLM = ChatGroq(
 )
 
 # Set the currently using LLM here
-LLM = OPENAI_LLM
+LLM = GROQ_LLM
