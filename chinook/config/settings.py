@@ -16,12 +16,23 @@ DB_PORT = 3306
 
 # openAI LLM settings
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-OPENAI_LLM_MODEL = "gpt-3.5-turbo"
-OPENAI_CLIENT = OpenAI()
+OPENAI_LLM = ChatGroq(
+    model="gpt-3.5-turbo",
+    temperature=0,
+    max_tokens=None,
+    timeout=None,
+    max_retries=2,
+)
 
 #Groq
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
+GROQ_LLM = ChatGroq(
+    model="llama3-8b-8192",
+    temperature=0,
+    max_tokens=None,
+    timeout=None,
+    max_retries=2,
+)
 
-
-# Logging settings
-LOG_LEVEL = "INFO"
+# Set the currently using LLM here
+LLM = GROQ_LLM

@@ -1,11 +1,10 @@
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
-from langchain_openai import ChatOpenAI
-from langchain_core.runnables import RunnablePassthrough
+from config.settings import LLM
 
 class IntentClarificationChain:
     def __init__(self):
-        self.llm = ChatOpenAI()
+        self.llm = LLM
         self.prompt = ChatPromptTemplate.from_template("""
         Based on the table schema below, clarify the intent of the user's question.
         

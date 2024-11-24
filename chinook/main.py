@@ -1,6 +1,5 @@
 import os
 import time
-from config.settings import OPENAI_CLIENT, OPENAI_LLM_MODEL
 from typing import Dict, Any
 from database.connection import get_db
 # from database.models import RunningLog
@@ -46,28 +45,10 @@ class FullChain:
                 'status': 'system_error',
                 'error': str(e)
             }
-        
-def get_completion(prompt):
-
-    messages = [{"role": "user", "content": prompt}]
-    
-    response = OPENAI_CLIENT.chat.completions.create(
-        model = OPENAI_LLM_MODEL,
-        messages=messages,
-        temperature=0, 
-    )
-    return response.choices[0].message
 
 if __name__ == "__main__":
-    import asyncio
-    
-    async def main():
-        chain = FullChain()
-        result = await chain.process_question(
-            "我想要知道最有激情的音乐中卖的最多是哪一个"
-        )
-        print(result)
-        print(OPENAI_CLIENT.api_key)
-        print(get_completion("1+1是什么？"))
-
-    asyncio.run(main())
+    chain = FullChain()
+    result = chain.process_question(
+        "我想要知道最有激情的音乐中卖的最多是哪一个"
+    )
+    print(result)
