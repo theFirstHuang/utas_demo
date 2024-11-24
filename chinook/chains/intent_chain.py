@@ -1,5 +1,7 @@
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import JsonOutputParser
 from langchain_openai import ChatOpenAI
+from langchain_core.runnables import RunnablePassthrough
 
 class IntentClarificationChain:
     def __init__(self):
@@ -10,24 +12,24 @@ class IntentClarificationChain:
         Schema: {schema}
         Question: {question}
         
-        Please analyze:
-        1. Is the question specific and clear enough for a SQL query?
-        2. Are there any ambiguous terms or missing information?
-        3. What assumptions should be made about the request?
-        
-        Return a JSON with this format:
-        {
-            "is_clear": true/false,
-            "missing_info": ["list of missing information"],
-            "clarified_question": "rewritten clear question"
-        }
+        Return a JSON with:
+        1. is_clear: whether the question is clear enough for SQL
+        2. missing_info: list of any missing information
+        3. clarified_question: the question rewritten in a clear way
         """)
-    
-    async def clarify(self, question: str, schema: str) -> dict:
-        response = await self.llm.ainvoke(
-            self.prompt.format(
-                schema=schema,
-                question=question
-            )
+        
+        self.parser = JsonOutputParser()
+        
+        # 构建chain
+        self.chain = (
+            self.prompt 
+            | self.llm 
+            | self.parser
         )
-        return response.content
+    
+    def clarify(self, question: str, schema: str):
+        """使用chain处理用户问题"""
+        return self.chain.invoke({
+            "schema": schema,
+            "question": question
+        })

@@ -1,5 +1,6 @@
 import os
 import time
+from config.settings import OPENAI_CLIENT, OPENAI_LLM_MODEL
 from typing import Dict, Any
 from database.connection import get_db
 # from database.models import RunningLog
@@ -11,11 +12,11 @@ from chains.intent_chain import IntentClarificationChain
 class FullChain:
     def __init__(self):
         self.db = get_db()
-        self.running_log = RunningLog(self.db)
+        # self.running_log = RunningLog(self.db)
         self.intent_chain = IntentClarificationChain()
-        self.sql_chain = SQLChain()
-        self.optimization_chain = QueryOptimizationChain()
-        self.feedback_chain = FeedbackChain(self.running_log)
+        # self.sql_chain = SQLChain()
+        # self.optimization_chain = QueryOptimizationChain()
+        # self.feedback_chain = FeedbackChain(self.running_log)
         
     async def process_question(self, question: str) -> Dict[str, Any]:
         schema = self.db.get_table_info()
@@ -31,7 +32,7 @@ class FullChain:
         try:
             # 1. Intent Clarification
             print('--- RUNNING Chain 1: intent_chain')
-            intent_result = await self.intent_chain.clarify(question, schema)
+            intent_result = self.intent_chain.clarify(question, schema)
             print(intent_result)
 
             if not intent_result['is_clear']:
@@ -45,6 +46,17 @@ class FullChain:
                 'status': 'system_error',
                 'error': str(e)
             }
+        
+def get_completion(prompt):
+
+    messages = [{"role": "user", "content": prompt}]
+    
+    response = OPENAI_CLIENT.chat.completions.create(
+        model = OPENAI_LLM_MODEL,
+        messages=messages,
+        temperature=0, 
+    )
+    return response.choices[0].message
 
 if __name__ == "__main__":
     import asyncio
@@ -55,5 +67,7 @@ if __name__ == "__main__":
             "我想要知道最有激情的音乐中卖的最多是哪一个"
         )
         print(result)
+        print(OPENAI_CLIENT.api_key)
+        print(get_completion("1+1是什么？"))
 
     asyncio.run(main())
