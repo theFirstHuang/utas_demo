@@ -9,13 +9,12 @@ _ = load_dotenv(find_dotenv()) # read local .env file
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
 # Database settings
-DB_CONFIG = {
-    'host': 'localhost',
-    'user': 'root',
-    'password': os.getenv('DB_PASSWORD'),
-    'database': 'chinook',
-    'port': 3306
-}
+DB_PASSWORD = os.getenv('DB_PASSWORD')
+DB_NAME = 'chinook'
+DB_USER = 'root'
+DB_HOST = 'localhost'
+DB_PORT = 3306
+
 
 # openAI LLM settings
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')

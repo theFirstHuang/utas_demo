@@ -2,11 +2,11 @@ import os
 import time
 from typing import Dict, Any
 from database.connection import get_db
-from database.models import RunningLog
+# from database.models import RunningLog
 from chains.intent_chain import IntentClarificationChain
-from chains.sql_chain import SQLChain
-from chains.optimization_chain import QueryOptimizationChain
-from chains.feedback_chain import FeedbackChain
+# from chains.sql_chain import SQLChain
+# from chains.optimization_chain import QueryOptimizationChain
+# from chains.feedback_chain import FeedbackChain
 
 class FullChain:
     def __init__(self):
