@@ -14,7 +14,8 @@ class FeedbackChain:
                      success: bool = True,
                      error_message: str = None,
                      result_summary: str = None,
-                     performance_metrics: Dict = None):
+                     performance_metrics: Dict = None,
+                     natural_response: str = None):
         """记录查询执行的详细信息"""
         
         log_data = {
@@ -26,7 +27,8 @@ class FeedbackChain:
             'success': success,
             'error_message': error_message,
             'result_summary': result_summary,
-            'performance_metrics': performance_metrics or {}
+            'performance_metrics': performance_metrics or {},
+            'natural_response': natural_response
         }
         
         self.running_log.log_attempt(log_data)

@@ -11,13 +11,13 @@ class RunningLog:
     def log_attempt(self, data: Dict[str, Any]):
         """记录一次查询尝试"""
         try:
-            # 处理性能指标
+            #处理performance_metrics
             if 'performance_metrics' in data and isinstance(data['performance_metrics'], dict):
                 performance_metrics = json.dumps(data.get('performance_metrics'))
             else:
                 performance_metrics = None
 
-            # 准备所有参数    
+            # 数据准备
             log_id = str(uuid.uuid4())
             original_question = data.get('original_question')
             clarified_question = data.get('clarified_question')
@@ -27,8 +27,9 @@ class RunningLog:
             success = 1 if data.get('success') else 0  # 转换为 TINYINT
             error_message = data.get('error_message')
             result_summary = data.get('result_summary')
+            natural_response = data.get('natural_response')
 
-            # 构建 INSERT 语句
+            # 构建query
             insert_sql = f"""
             INSERT INTO running_log (
                 id, original_question, clarified_question,
@@ -46,7 +47,8 @@ class RunningLog:
                 '{self._escape_string(error_message)}',
                 '{self._escape_string(result_summary)}',
                 '{self._escape_string(performance_metrics)}',
-                NOW()
+                NOW(),
+                '{self._escape_string(natural_response)}'
             )
             """
             

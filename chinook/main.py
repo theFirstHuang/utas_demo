@@ -6,6 +6,7 @@ from chains.intent_chain import IntentClarificationChain
 from chains.sql_chain import SQLChain
 from chains.optimization_chain import QueryOptimizationChain
 from chains.feedback_chain import FeedbackChain
+from chains.response_chain import ResponseChain
 
 class FullChain:
     def __init__(self):
@@ -15,6 +16,7 @@ class FullChain:
         self.sql_chain = SQLChain()
         self.optimization_chain = QueryOptimizationChain()
         self.feedback_chain = FeedbackChain(self.running_log)
+        self.response_chain = ResponseChain()
         
     def process_question(self, question: str) -> Dict[str, Any]:
         schema = self.db.get_table_info()
@@ -25,7 +27,8 @@ class FullChain:
         2. SQL生成
         3. 查询优化（如果需要）
         4. 执行查询
-        5. 记录日志
+        5. 自然语言回复
+        6. 记录日志
         """
         try:
             # 1. Intent Clarification
@@ -53,8 +56,25 @@ class FullChain:
             try:
                 result = self.db.run(sql_query)
                 execution_time = time.time() - start_time
+
+                # 5. generate human response
+                print('Running Success')
+                print('--- RUNNING Chain 5: response chain')
+                if result:
+                    natural_response = self.response_chain.generate_response(
+                        question=question,
+                        sql_query=sql_query,
+                        result=result
+                    )
+                    print(natural_response)
+                    return {
+                        'status': 'success',
+                        'result': result,
+                        'natural_response': natural_response,
+                        'execution_time': execution_time
+                    }
                 
-                # 5.1 Log successful execution
+                # 6.1 Log successful execution
                 self.feedback_chain.log_execution(
                     original_question=question,
                     clarified_question=intent_result['clarified_question'],
@@ -64,7 +84,7 @@ class FullChain:
                     result_summary=str(result)[:1000],
                     performance_metrics={'rows': len(result)}
                 )
-                print('Running Success')
+                
                 print('--- RUNNING Chain 5: Logging info')
                 return {
                     'status': 'success',
@@ -81,7 +101,7 @@ class FullChain:
                     str(e), 
                     schema
                 )
-                print(f'query after optimization:\n{optimized_query}')
+                print(f'query after optimization:\n{optimized_query}\n')
 
                 try:
                     # 4.2 Execute optimized query
@@ -89,9 +109,27 @@ class FullChain:
                     start_time = time.time()
                     result = self.db.run(optimized_query)
                     execution_time = time.time() - start_time
+
+                    # 5. generate human response
                     print('Running Success after optimization')
+                    print('--- RUNNING Chain 5: response chain')
+                    if result:
+                        natural_response = self.response_chain.generate_response(
+                            question=question,
+                            sql_query=sql_query,
+                            result=result
+                        )
+                        print(natural_response)
+                        return {
+                            'status': 'success',
+                            'result': result,
+                            'natural_response': natural_response,
+                            'execution_time': execution_time
+                        }
+
                     print('--- RUNNING Chain 5.2: Logging info')
-                    # 5.2 Log successful execution after optimized
+
+                    # 6.2 Log successful execution after optimized
                     self.feedback_chain.log_execution(
                         original_question=question,
                         clarified_question=intent_result['clarified_question'],
@@ -110,8 +148,24 @@ class FullChain:
                     }
                     
                 except Exception as e:
-                    # 5.3 Log unsuccessful execution
+                    # 5. generate human response
                     print('Running Failed after optimization')
+                    print('--- RUNNING Chain 5: response chain')
+                    if result:
+                        natural_response = self.response_chain.generate_response(
+                            question=question,
+                            sql_query=sql_query,
+                            result=result
+                        )
+                        print(natural_response)
+                        return {
+                            'status': 'success',
+                            'result': result,
+                            'natural_response': natural_response,
+                            'execution_time': execution_time
+                        }
+
+                    # 6.3 Log unsuccessful execution
                     print('--- RUNNING Chain 5.3: Logging info')
                     self.feedback_chain.log_execution(
                         original_question=question,
