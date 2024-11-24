@@ -57,7 +57,6 @@ class RunningLog:
             )
             """
             
-            print(f"Insert SQL is:\n{insert_sql}")
             self.db.run(insert_sql)
             
         except Exception as e:

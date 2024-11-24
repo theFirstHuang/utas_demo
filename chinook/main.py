@@ -105,10 +105,10 @@ class FullChain:
                     result = self.db.run(optimized_query)
                     execution_time = time.time() - start_time
 
-                    # 5. generate human response
-                    print('Running Success after optimization')
-                    print('--- RUNNING Chain 5: response chain')
                     if result:
+                        # 5. generate human response
+                        print('Running Success after optimization')
+                        print('--- RUNNING Chain 5: response chain')
                         natural_response = self.response_chain.generate_response(
                             question=question,
                             sql_query=sql_query,
@@ -116,26 +116,26 @@ class FullChain:
                         )
                         print(natural_response)
 
-                    print('--- RUNNING Chain 6.2: Logging info')
+                        print('--- RUNNING Chain 6.2: Logging info')
 
-                    # 6.2 Log successful execution after optimized
-                    self.feedback_chain.log_execution(
-                        original_question=question,
-                        clarified_question=intent_result['clarified_question'],
-                        generated_sql=sql_query,
-                        optimized_sql=optimized_query,
-                        execution_time=execution_time,
-                        success=True,
-                        result_summary=str(result)[:1000],
-                        performance_metrics={'rows': len(result)},
-                        natural_response=natural_response
-                    )
+                        # 6.2 Log successful execution after optimized
+                        self.feedback_chain.log_execution(
+                            original_question=question,
+                            clarified_question=intent_result['clarified_question'],
+                            generated_sql=sql_query,
+                            optimized_sql=optimized_query,
+                            execution_time=execution_time,
+                            success=True,
+                            result_summary=str(result)[:1000],
+                            performance_metrics={'rows': len(result)},
+                            natural_response=natural_response
+                        )
                     
-                    return {
-                        'status': 'success_after_optimization',
-                        'result': result,
-                        'execution_time': execution_time
-                    }
+                        return {
+                            'status': 'success_after_optimization',
+                            'result': result,
+                            'execution_time': execution_time
+                        }
                     
                 except Exception as e:
                     # 5. generate human response
@@ -173,8 +173,21 @@ class FullChain:
             }
 
 if __name__ == "__main__":
+    question = "哪些音乐在普通工作日的工作时间9-17点的销量特别好?"
     chain = FullChain()
     result = chain.process_question(
-        "我想要知道最有激情的音乐中卖的最多是哪一个"
+        question
     )
     print(result)
+
+    # useable questions list
+    """
+    我想要知道最有激情的音乐中卖的最多是哪一个
+    - Which artist is the fan-favorite based on sales?
+    - 最能带动学生聚会气氛的音乐类型是什么？
+    - Which genre gets students most excited? 
+    - 用户最常单独购买的歌曲是哪些？
+    - 每个国家销售额最高的音乐类型是什么？
+    - 最容易让用户重复购买的专辑类型是什么
+    - 哪些音乐在普通工作日的工作时间段的销量特别好？
+    """
