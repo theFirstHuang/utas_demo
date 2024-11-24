@@ -18,6 +18,8 @@ class FullChain:
         self.feedback_chain = FeedbackChain(self.running_log)
         
     async def process_question(self, question: str) -> Dict[str, Any]:
+        schema = self.db.get_table_info()
+        
         """
         处理用户问题的主要流程
         1. 意图理解和澄清
@@ -27,8 +29,16 @@ class FullChain:
         5. 记录日志
         """
         try:
-            # 待实现: 调用各个chain处理问题
-            pass
+            # 1. Intent Clarification
+            print('--- RUNNING Chain 1: intent_chain')
+            intent_result = await self.intent_chain.clarify(question, schema)
+            print(intent_result)
+
+            if not intent_result['is_clear']:
+                return {
+                    'status': 'needs_clarification',
+                    'missing_info': intent_result['missing_info']
+                }
             
         except Exception as e:
             return {
@@ -42,7 +52,7 @@ if __name__ == "__main__":
     async def main():
         chain = FullChain()
         result = await chain.process_question(
-            "Show me all rock music sales from last month"
+            "我想要知道最有激情的音乐中卖的最多是哪一个"
         )
         print(result)
 
