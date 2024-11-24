@@ -17,6 +17,7 @@ DB_PORT = 3306
 # openAI LLM settings
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 OPENAI_LLM = ChatOpenAI(
+    model="gpt-3.5-turbo-0125",
     temperature=0,
     max_tokens=None,
     timeout=None,
@@ -26,7 +27,7 @@ OPENAI_LLM = ChatOpenAI(
 #Groq
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 GROQ_LLM = ChatGroq(
-    model="llama3-8b-8192",
+    model="llama3-70b-8192",
     temperature=0,
     max_tokens=None,
     timeout=None,
