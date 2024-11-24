@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv, find_dotenv
 from langchain_groq import ChatGroq
+from langchain_openai import ChatOpenAI
 
 
 _ = load_dotenv(find_dotenv()) # read local .env file
@@ -15,8 +16,7 @@ DB_PORT = 3306
 
 # openAI LLM settings
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-OPENAI_LLM = ChatGroq(
-    model="gpt-3.5-turbo",
+OPENAI_LLM = ChatOpenAI(
     temperature=0,
     max_tokens=None,
     timeout=None,
@@ -34,4 +34,4 @@ GROQ_LLM = ChatGroq(
 )
 
 # Set the currently using LLM here
-LLM = GROQ_LLM
+LLM = OPENAI_LLM

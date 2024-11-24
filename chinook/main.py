@@ -17,7 +17,7 @@ class FullChain:
         # self.optimization_chain = QueryOptimizationChain()
         # self.feedback_chain = FeedbackChain(self.running_log)
         
-    async def process_question(self, question: str) -> Dict[str, Any]:
+    def process_question(self, question: str) -> Dict[str, Any]:
         schema = self.db.get_table_info()
         
         """
