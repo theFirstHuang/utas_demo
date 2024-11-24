@@ -67,14 +67,9 @@ class FullChain:
                         result=result
                     )
                     print(natural_response)
-                    return {
-                        'status': 'success',
-                        'result': result,
-                        'natural_response': natural_response,
-                        'execution_time': execution_time
-                    }
                 
                 # 6.1 Log successful execution
+                print('--- RUNNING Chain 6.1: Logging info')
                 self.feedback_chain.log_execution(
                     original_question=question,
                     clarified_question=intent_result['clarified_question'],
@@ -82,10 +77,10 @@ class FullChain:
                     execution_time=execution_time,
                     success=True,
                     result_summary=str(result)[:1000],
-                    performance_metrics={'rows': len(result)}
+                    performance_metrics={'rows': len(result)},
+                    natural_response=natural_response
                 )
                 
-                print('--- RUNNING Chain 5: Logging info')
                 return {
                     'status': 'success',
                     'result': result,
@@ -120,14 +115,8 @@ class FullChain:
                             result=result
                         )
                         print(natural_response)
-                        return {
-                            'status': 'success',
-                            'result': result,
-                            'natural_response': natural_response,
-                            'execution_time': execution_time
-                        }
 
-                    print('--- RUNNING Chain 5.2: Logging info')
+                    print('--- RUNNING Chain 6.2: Logging info')
 
                     # 6.2 Log successful execution after optimized
                     self.feedback_chain.log_execution(
@@ -138,7 +127,8 @@ class FullChain:
                         execution_time=execution_time,
                         success=True,
                         result_summary=str(result)[:1000],
-                        performance_metrics={'rows': len(result)}
+                        performance_metrics={'rows': len(result)},
+                        natural_response=natural_response
                     )
                     
                     return {
@@ -151,29 +141,24 @@ class FullChain:
                     # 5. generate human response
                     print('Running Failed after optimization')
                     print('--- RUNNING Chain 5: response chain')
-                    if result:
-                        natural_response = self.response_chain.generate_response(
-                            question=question,
-                            sql_query=sql_query,
-                            result=result
-                        )
-                        print(natural_response)
-                        return {
-                            'status': 'success',
-                            'result': result,
-                            'natural_response': natural_response,
-                            'execution_time': execution_time
-                        }
+                    result = "failed to run query"
+                    natural_response = self.response_chain.generate_response(
+                        question=question,
+                        sql_query=sql_query,
+                        result=result
+                    )
+                    print(natural_response)
 
                     # 6.3 Log unsuccessful execution
-                    print('--- RUNNING Chain 5.3: Logging info')
+                    print('--- RUNNING Chain 6.3: Logging info')
                     self.feedback_chain.log_execution(
                         original_question=question,
                         clarified_question=intent_result['clarified_question'],
                         generated_sql=sql_query,
                         optimized_sql=optimized_query,
                         success=False,
-                        error_message=str(e)
+                        error_message=str(e),
+                        natural_response=natural_response
                     )
                     print('Full Chain finished')
                     return {

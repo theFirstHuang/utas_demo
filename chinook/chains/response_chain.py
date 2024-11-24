@@ -24,7 +24,7 @@ class ResponseChain:
             | self.parser
         )
     
-    def generate_response(self, question: str, sql_query: str, result: Any) -> str:
+    def generate_response(self, question: str, sql_query: str, result) -> str:
         return self.chain.invoke({
             "question": question,
             "sql_query": sql_query,
