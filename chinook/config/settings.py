@@ -1,7 +1,6 @@
 import os
 from dotenv import load_dotenv, find_dotenv
-from groq import Groq
-from openai import OpenAI
+from langchain_groq import ChatGroq
 
 
 _ = load_dotenv(find_dotenv()) # read local .env file
