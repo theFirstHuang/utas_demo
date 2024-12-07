@@ -13,6 +13,7 @@ DB_USER = 'root'
 DB_HOST = 'localhost'
 DB_PORT = 3306
 
+"""--------------------LLM API--------------------"""
 
 # openAI LLM settings
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
@@ -36,3 +37,20 @@ GROQ_LLM = ChatGroq(
 
 # Set the currently using LLM here
 LLM = GROQ_LLM
+
+
+"""--------------------VECTOR DB--------------------"""
+CHROMA_SETTINGS = {
+    "persist_directory": "./chroma_db",
+    "anonymized_telemetry": False,
+    "allow_reset": True
+}
+
+# 示例使用
+COLLECTION_NAMES = {
+    "ARTIST": "artist_collection",
+    "ALBUM": "album_collection",
+    "GENRE": "genre_collection",
+    "TRACK": "track_collection",
+    "PLAYLIST": "playlist_collection"
+}
