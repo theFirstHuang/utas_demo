@@ -36,7 +36,7 @@ GROQ_LLM = ChatGroq(
 )
 
 # Set the currently using LLM here
-LLM = GROQ_LLM
+LLM = OPENAI_LLM
 
 
 """--------------------VECTOR DB--------------------"""

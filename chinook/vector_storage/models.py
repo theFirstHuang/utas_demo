@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import List, Dict, Optional, Any
 import json
+import uuid
 from vector_storage.connection import ChromaDBConnection
 
 # helper function processing list meta value
