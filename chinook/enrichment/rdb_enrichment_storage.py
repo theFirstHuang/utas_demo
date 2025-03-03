@@ -50,7 +50,7 @@ class RDBEnrichmentStorageService:
                 'genres': data.get('genres'),
                 'era': data.get('era'),
                 'primary_style': data.get('primary_style'),
-                'popularity_tier': data.get('popularity_tier')
+                'popularity_level': data.get('popularity_level')
             }
             self._store_metadata('artist_metadata', artist_id, rdb_metadata)
             
@@ -82,10 +82,11 @@ class RDBEnrichmentStorageService:
         """Store track enrichment data in both RDB and VDB"""
         try:
             # Store in RDB
+            print(f"data is : \n{data}")
             rdb_metadata = {
-                'genre_classification': data.get('genre_classification'),
-                'mood_tags': data.get('mood_tags'),
-                'tempo_category': data.get('tempo_category'),
+                'genre': data.get('genre'),
+                'moods': data.get('moods'),
+                'tempo': data.get('tempo'),
                 'popularity_level': data.get('popularity_level')
             }
             self._store_metadata('track_metadata', track_id, rdb_metadata)

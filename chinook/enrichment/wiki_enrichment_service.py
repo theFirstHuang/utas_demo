@@ -17,12 +17,11 @@ class WikipediaEnrichmentService:
     def _create_artist_parser(self):
         prompt = ChatPromptTemplate.from_template(
             """
-            Based on the provided context about the artist, extract and structure the following information:
-            1. Key musical style characteristics and description
-            2. Major career achievements and milestones
-            3. Industry influence and impact
-            4. Similar artists and why they are similar
-            5. Musical philosophy and artistic approach
+            "musical_style": "description of their musical style and characteristics",
+            "career": "major achievements and milestones",
+            "influence": "industry influence and impact",
+            "similar_artists": "list of similar artists and reasons",
+            "philosophy": "musical philosophy if available"
             
             Also identify:
             - genres: (list)
@@ -48,18 +47,20 @@ class WikipediaEnrichmentService:
         prompt = ChatPromptTemplate.from_template(
             """Based on the provided context about the music track, 
             extract and structure the following information in natural language sentences (100 words maximum in each):
-            1. Lyrical themes and meaning
-            2. Musical elements and composition
-            3. Production and recording background
-            4. Emotional tone and atmosphere
-            5. Common usage scenarios or contexts
+            
+            "lyrics": "main theme and meaning of lyrics",
+            "composition": "musical elements and composition details",
+            "background": "production and recording background",
+            "emotion": "emotional tone and mood",
+            "usage": "common usage scenarios"
 
-            Also identify and format your response as a JSON object with these keys. If information is not available, use null:
-            - genre_classification
-            - mood_tags: (list)
-            - tempo_category: (slow/medium/fast)
+            Also identify:
+            - genre: (main genre)
+            - moods: (list of mood tags)
+            - tempo: (slow/medium/fast)
             - popularity_level: (1-5)
             
+            Format as JSON object with these keys. Use null if unavailable.
             Context: {context}
             Track: {track_name}
             Artist: {artist_name}""")

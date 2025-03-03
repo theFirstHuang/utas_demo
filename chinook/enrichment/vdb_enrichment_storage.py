@@ -19,17 +19,16 @@ class VDBEnrichmentStorageService:
                 'genres': data.get('genres'),
                 'era': data.get('era'),
                 'primary_style': data.get('primary_style'),
-                'popularity_level': data.get('popularity_level'),
-                'pop_tier' : data.get('pop_tier')
+                'popularity_level': data.get('popularity_level')
             })
             
             # 准备content
             vdb_content = f"""
-            Musical Style: {data.get('musical_style_description')}
-            Career Highlights: {data.get('career_highlights')}
-            Industry Influence: {data.get('influence_description')}
-            Similar Artists: {data.get('similar_artists_description')}
-            Musical Philosophy: {data.get('musical_philosophy')}
+            Musical Style: {data.get('musical_style')}
+            Career Highlights: {data.get('career')}
+            Industry Influence: {data.get('influence')}
+            Similar Artists: {data.get('similar_artists')}
+            Musical Philosophy: {data.get('philosophy')}
             """
             
             # 创建doc
@@ -53,21 +52,22 @@ class VDBEnrichmentStorageService:
         try:
             # 准备meta
             shared_metadata = clean_metadata({
-                'genre_classification': data.get('genre_classification'),
-                'mood_tags': data.get('mood_tags'),
-                'tempo_category': data.get('tempo_category'),
+                'genre': data.get('genre'),
+                'moods': data.get('moods'),
+                'tempo': data.get('tempo'),
                 'popularity_level': data.get('popularity_level')
             })
             
             # 准备content
             vdb_content = f"""
-            Lyrics Theme: {data.get('lyrics_theme')}
-            Musical Elements: {data.get('musical_elements')}
-            Production Background: {data.get('production_background')}
-            Emotional Tone: {data.get('emotional_tone')}
-            Usage Scenarios: {data.get('usage_scenarios')}
+            lyrics: {data.get('lyrics')}
+            composition: {data.get('composition')}
+            background: {data.get('background')}
+            emotion: {data.get('emotion')}
+            usage: {data.get('usage')}
             """
-            
+            print(f"shared_metadata is :\n{shared_metadata}")
+            print(f"vdb_content is :\n{vdb_content}")
             # 创建doc
             vector_doc = VectorDocument.create(
                 content=vdb_content.strip(),

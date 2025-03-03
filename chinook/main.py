@@ -1,4 +1,6 @@
 import time
+import jpype
+import jaydbapi
 from typing import Dict, Any
 from config.settings import COLLECTION_NAMES
 from enrichment.rdb_enrichment_storage import RDBEnrichmentStorageService
@@ -239,12 +241,12 @@ if __name__ == "__main__":
     storage_service = RDBEnrichmentStorageService()
     vdb_storage = VDBEnrichmentStorageService()
     artist_name = "Accept"
-    track_name = "For Those About To Rock (We Salute You)"
+    track_name = "Balls to the Wall"
     artist_id = 2
-    track_id = 1
-    result = service.enrich_artist(artist_name)
-    #result = service.enrich_track(track_name, artist_name)
-    print(result)
-    vdb_storage.store_artist_enrichment(artist_id,result)
+    track_id = 2
+    #result = service.enrich_artist(artist_name)
+    result = service.enrich_track(track_name, artist_name)
+    print(f"Result is: {result}")
+    vdb_storage.store_track_enrichment(track_id,result)
     storage_service.store_track_enrichment(track_id, result)
     print("Finished")

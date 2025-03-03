@@ -7,7 +7,7 @@ from config.settings import COLLECTION_NAMES
 def visualize_chroma_collections():
     vdb = ChromaDBConnection()
     client = vdb.get_client()
-    collection = client.get_collection(COLLECTION_NAMES["ARTIST"])
+    collection = client.get_collection(COLLECTION_NAMES["TRACK"])
     
     # 获取所有数据
     results = collection.get()
